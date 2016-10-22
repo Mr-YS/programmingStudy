@@ -12,14 +12,29 @@ public class Main
 							{7,6,3,1,0}
 						 };
 		
-		boolean[] temp = new boolean[matrix.length];
+		boolean[] mstSet = new boolean[matrix.length];
 		
-		for(int i=0;i<temp.length;i++)
-			System.out.println(".::"+temp[i]);
+		for(int i=0;i<mstSet.length;i++)
+			System.out.println(".::"+mstSet[i]);
 		print(matrix);
 		Vertex[] arr = converter(matrix);
 		quickSort(arr,0,arr.length-1);
 		print(arr);
+		
+		int sum = 0;
+
+		for(int i=0;i<arr.length;i++)
+		{
+			if(mstSet[arr[i].getA()] == true && mstSet[arr[i].getB()] == true)
+			{
+				continue;
+			}
+			sum += arr[i].getWeight();
+			System.out.println("sum:"+sum+"  a:"+arr[i].getA()+"  b:"+arr[i].getB());
+			mstSet[arr[i].getA()] = true;
+			mstSet[arr[i].getB()] = true;
+		}
+		System.out.println("mst = "+sum);
 	}
 	public static void print(Vertex[] arr)
 	{
@@ -45,10 +60,6 @@ public class Main
 			}
 			System.out.println();
 		}
-	}
-	public static boolean check(int[] arr)
-	{
-		return true;
 	}
 	public static Vertex[] converter(int[][] arr)
 	{
@@ -86,7 +97,7 @@ public class Main
 	{
 		int i = left;
 		int j = right;
-		int temp;
+		Vertex temp;
 		int pivot = arr[(left+right)/2].getWeight();
 
 		while(i<=j)
@@ -100,9 +111,9 @@ public class Main
 				j--;
 			}
 			if(i<=j) {
-				temp = arr[i].getWeight();
-				arr[i].setWeight(arr[j].getWeight());
-				arr[j].setWeight(temp);
+				temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
 				i++;
 				j--;
 			}
@@ -131,6 +142,16 @@ class Vertex
 	public int getWeight()
 	{
 		return weight;
+	}
+	
+	public int getA()
+	{
+		return a;
+	}
+
+	public int getB()
+	{
+		return b;
 	}
 
 	public void setWeight(int weight)
